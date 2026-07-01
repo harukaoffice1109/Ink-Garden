@@ -1,0 +1,443 @@
+:root {
+  --paper: #e9ebdf;
+  --paper-deep: #d8ddcc;
+  --sumi: #151718;
+  --ink-soft: rgba(21, 23, 24, 0.72);
+  --indigo: #24536c;
+  --cinnabar: #b84c32;
+  --moss: #486a4f;
+  --gold: #b7984d;
+  --line: rgba(21, 23, 24, 0.16);
+  --panel: rgba(235, 237, 225, 0.68);
+  --panel-strong: rgba(248, 249, 241, 0.82);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 52% 38%, rgba(255, 255, 246, 0.42), transparent 38%),
+    linear-gradient(145deg, var(--paper), var(--paper-deep));
+  color: var(--sumi);
+  font-family:
+    "Iowan Old Style", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC",
+    "Hiragino Mincho ProN", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+}
+
+.garden {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+#paperLayer {
+  z-index: 0;
+}
+
+#fishLayer {
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.78;
+  filter: saturate(0.68) contrast(0.9) brightness(0.97) blur(0.12px);
+}
+
+#inkLayer {
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+
+#surfaceLayer {
+  z-index: 3;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.title {
+  position: fixed;
+  z-index: 5;
+  top: max(24px, env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.title h1 {
+  margin: 4px 0 0;
+  font-size: clamp(36px, 8vw, 76px);
+  line-height: 0.94;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  font-weight: 700;
+}
+
+.title .seal {
+  margin: 0;
+  color: rgba(21, 23, 24, 0.46);
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(10px, 1.35vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.title.dim {
+  opacity: 0.12;
+  transform: translateY(-8px);
+}
+
+.poem {
+  position: fixed;
+  z-index: 4;
+  left: max(24px, env(safe-area-inset-left));
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.48em;
+  color: rgba(21, 23, 24, 0.18);
+  font-size: clamp(15px, 1.8vw, 22px);
+  font-weight: 650;
+  pointer-events: none;
+}
+
+.corner-mark,
+.seal-mark {
+  position: fixed;
+  z-index: 4;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.corner-mark {
+  width: 74px;
+  height: 74px;
+  opacity: 0.28;
+}
+
+.corner-mark::before,
+.corner-mark::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+.corner-mark::before {
+  width: 100%;
+  height: 1px;
+}
+
+.corner-mark::after {
+  width: 1px;
+  height: 100%;
+}
+
+.corner-mark-tl {
+  top: max(25px, env(safe-area-inset-top));
+  left: max(25px, env(safe-area-inset-left));
+}
+
+.corner-mark-tl::before {
+  top: 0;
+  left: 0;
+  background: linear-gradient(90deg, rgba(21, 23, 24, 0.34), rgba(21, 23, 24, 0));
+}
+
+.corner-mark-tl::after {
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, rgba(21, 23, 24, 0.34), rgba(21, 23, 24, 0));
+}
+
+.corner-mark-br {
+  right: max(25px, env(safe-area-inset-right));
+  bottom: max(25px, env(safe-area-inset-bottom));
+}
+
+.corner-mark-br::before {
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(270deg, rgba(21, 23, 24, 0.32), rgba(21, 23, 24, 0));
+}
+
+.corner-mark-br::after {
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(21, 23, 24, 0.32), rgba(21, 23, 24, 0));
+}
+
+.seal-mark {
+  right: max(40px, calc(env(safe-area-inset-right) + 28px));
+  bottom: max(40px, calc(env(safe-area-inset-bottom) + 28px));
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(184, 76, 50, 0.68);
+  color: rgba(184, 76, 50, 0.68);
+  font-size: 17px;
+  font-weight: 760;
+  line-height: 1;
+  opacity: 0.62;
+  transform: rotate(-4deg);
+}
+
+.seal-mark::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(184, 76, 50, 0.2);
+}
+
+.hud {
+  position: fixed;
+  z-index: 6;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: min(1050px, calc(100vw - 22px));
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  box-shadow: 0 16px 50px rgba(25, 28, 22, 0.12);
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  transition: opacity 450ms ease, transform 450ms ease;
+}
+
+.hud.idle {
+  opacity: 0.18;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.palette,
+.tools,
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.divider {
+  width: 1px;
+  height: 28px;
+  background: var(--line);
+  flex: 0 0 auto;
+}
+
+.chip,
+.tool,
+.action {
+  height: 34px;
+  min-width: 34px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(21, 23, 24, 0.78);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.chip {
+  padding: 0;
+}
+
+.chip span {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.34), transparent 34%),
+    var(--chip);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.tool,
+.action {
+  min-width: 38px;
+  padding: 0 11px;
+}
+
+.chip:hover,
+.tool:hover,
+.action:hover {
+  border-color: rgba(21, 23, 24, 0.2);
+  background: rgba(255, 255, 248, 0.42);
+}
+
+.chip.active,
+.tool.active,
+.action.active {
+  color: var(--paper);
+  border-color: var(--sumi);
+  background: var(--sumi);
+}
+
+.chip:focus-visible,
+.tool:focus-visible,
+.action:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 3px;
+}
+
+.status {
+  position: fixed;
+  z-index: 7;
+  left: 50%;
+  bottom: max(78px, calc(env(safe-area-inset-bottom) + 78px));
+  transform: translateX(-50%);
+  min-height: 20px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: rgba(21, 23, 24, 0.66);
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.status.show {
+  opacity: 1;
+}
+
+.fallback {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 247, 0.65), transparent 40%),
+    var(--paper);
+}
+
+.fallback[hidden] {
+  display: none;
+}
+
+.fallback h2 {
+  margin: 0;
+  letter-spacing: 0.16em;
+}
+
+.fallback p {
+  margin: 0;
+  color: rgba(21, 23, 24, 0.62);
+  line-height: 1.8;
+}
+
+.noscript {
+  position: fixed;
+}
+
+@media (max-width: 760px) {
+  .poem {
+    display: none;
+  }
+
+  .corner-mark {
+    width: 52px;
+    height: 52px;
+    opacity: 0.2;
+  }
+
+  .corner-mark-tl {
+    top: max(18px, env(safe-area-inset-top));
+    left: max(18px, env(safe-area-inset-left));
+  }
+
+  .corner-mark-br {
+    display: none;
+  }
+
+  .seal-mark {
+    right: max(17px, calc(env(safe-area-inset-right) + 12px));
+    bottom: max(104px, calc(env(safe-area-inset-bottom) + 104px));
+    width: 27px;
+    height: 27px;
+    font-size: 15px;
+    opacity: 0.48;
+  }
+
+  .hud {
+    width: calc(100vw - 18px);
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-radius: 22px;
+    padding: 8px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .tool,
+  .action {
+    min-width: 34px;
+    height: 32px;
+    padding: 0 9px;
+    font-size: 14px;
+  }
+
+  .chip {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .hud,
+  .status,
+  .chip,
+  .tool,
+  .action {
+    transition: none;
+  }
+}

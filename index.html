@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>墨庭 Ink Garden | 流墨生境互动艺术</title>
+    <meta
+      name="description"
+      content="墨庭 Ink Garden 是一个原创 WebGL 流墨生境：指尖扰水、金鱼引墨、花瓣落池，生成可保存和录制的水墨作品。"
+    />
+    <meta
+      name="keywords"
+      content="墨庭,Ink Garden,WebGL,流体模拟,水墨,生成艺术,金鱼,互动艺术,fluid simulation,generative art"
+    />
+    <meta name="author" content="moko" />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#e9ebdf" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="./" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="墨庭 Ink Garden" />
+    <meta property="og:description" content="指尖扰水、金鱼引墨、花瓣落池，生成一幅活的水墨作品。" />
+    <meta property="og:image" content="./og-image.svg" />
+    <meta property="og:locale" content="zh_CN" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "墨庭 Ink Garden",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires WebGL2",
+        "inLanguage": ["zh-CN", "en"],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="garden" aria-label="墨庭互动水墨池">
+      <canvas id="paperLayer" class="layer" aria-hidden="true"></canvas>
+      <canvas id="fishLayer" class="layer" aria-hidden="true"></canvas>
+      <canvas id="inkLayer" class="layer" aria-label="流墨画面"></canvas>
+      <canvas id="surfaceLayer" class="layer surface" aria-label="墨庭交互水面"></canvas>
+
+      <header class="title" id="title">
+        <p class="seal">Ink Garden</p>
+        <h1>墨庭</h1>
+      </header>
+
+      <p class="poem" aria-hidden="true">旧墨沉水底</p>
+      <div class="corner-mark corner-mark-tl" aria-hidden="true"></div>
+      <div class="corner-mark corner-mark-br" aria-hidden="true"></div>
+      <div class="seal-mark" aria-hidden="true">墨</div>
+
+      <section class="hud" aria-label="墨庭工具">
+        <div class="palette" role="group" aria-label="墨色">
+          <button class="chip active" data-color="sumi" aria-label="墨黑" aria-pressed="true" title="墨黑">
+            <span style="--chip:#161819"></span>
+          </button>
+          <button class="chip" data-color="indigo" aria-label="靛蓝" aria-pressed="false" title="靛蓝">
+            <span style="--chip:#24536c"></span>
+          </button>
+          <button class="chip" data-color="cinnabar" aria-label="朱砂" aria-pressed="false" title="朱砂">
+            <span style="--chip:#b84c32"></span>
+          </button>
+          <button class="chip" data-color="moss" aria-label="松绿" aria-pressed="false" title="松绿">
+            <span style="--chip:#486a4f"></span>
+          </button>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="tools" role="toolbar" aria-label="工具">
+          <button class="tool active" data-tool="brush" aria-pressed="true" title="墨刷" aria-label="墨刷">刷</button>
+          <button class="tool" data-tool="drop" aria-pressed="false" title="墨滴" aria-label="墨滴">滴</button>
+          <button class="tool" data-tool="vortex" aria-pressed="false" title="漩涡" aria-label="漩涡">旋</button>
+          <button class="tool" data-tool="water" aria-pressed="false" title="清水" aria-label="清水">水</button>
+          <button class="tool" data-tool="petal" aria-pressed="false" title="落花" aria-label="落花">花</button>
+          <button class="tool" data-tool="summon" aria-pressed="false" title="召鱼" aria-label="召鱼">鱼</button>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="actions" role="toolbar" aria-label="作品操作">
+          <button class="action" id="autoBtn" aria-pressed="false" title="静观" aria-label="静观自动生成">静</button>
+          <button class="action" id="audioBtn" aria-pressed="false" title="琴音" aria-label="琴音">音</button>
+          <button class="action" id="saveBtn" title="留影" aria-label="保存 PNG">存</button>
+          <button class="action" id="recordBtn" aria-pressed="false" title="录影" aria-label="录制 WebM">录</button>
+          <button class="action" id="shareBtn" title="分享" aria-label="复制分享链接">链</button>
+          <button class="action" id="nameBtn" title="题名" aria-label="生成题名">题</button>
+          <button class="action" id="clearBtn" title="清池" aria-label="清池">清</button>
+        </div>
+      </section>
+
+      <output class="status" id="status" aria-live="polite"></output>
+
+      <section class="fallback" id="fallback" hidden>
+        <h2>墨庭需要 WebGL2</h2>
+        <p>请使用最新版 Chrome、Edge、Safari 或 Firefox 打开。</p>
+      </section>
+
+      <noscript>
+        <section class="fallback noscript">
+          <h2>墨庭需要 JavaScript</h2>
+          <p>启用 JavaScript 后可体验流墨、金鱼、落花、保存和录制。</p>
+        </section>
+      </noscript>
+    </main>
+    <script src="./vendor/three.min.js"></script>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

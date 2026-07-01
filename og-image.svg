@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx=".52" cy=".42" r=".72">
+      <stop offset="0" stop-color="#fbfcf2"/>
+      <stop offset="1" stop-color="#d9decf"/>
+    </radialGradient>
+    <filter id="n">
+      <feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .16"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect width="1200" height="630" filter="url(#n)" opacity=".45"/>
+  <path d="M120 370c210-210 600-245 940-60-96 32-159 91-200 178-168-116-385-86-740-118z" fill="#151718" opacity=".86"/>
+  <path d="M285 330c145-118 364-126 578-16-182 18-329 72-444 164-60-38-102-86-134-148z" fill="#24536c" opacity=".48"/>
+  <path d="M736 278c24-3 47 7 59 27-36 0-64 11-85 31-2-24 7-43 26-58z" fill="#b84c32" opacity=".72"/>
+  <text x="92" y="142" fill="#151718" font-family="serif" font-size="78" letter-spacing="18">墨庭</text>
+  <text x="96" y="193" fill="#151718" opacity=".52" font-family="Avenir, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="12">INK GARDEN</text>
+</svg>
